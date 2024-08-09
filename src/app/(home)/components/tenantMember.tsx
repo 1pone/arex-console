@@ -1,4 +1,4 @@
-import Stat from './stat'
+import Stat from '@/components/stat'
 
 export async function TenantMember() {
   const member = 0

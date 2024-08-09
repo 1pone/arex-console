@@ -1,9 +1,9 @@
 'use client'
 
+import Stat from '@/components/stat'
 import { TENANT_EXPIRE_KEY } from '@/lib/auth'
 import { getCookie } from 'cookies-next'
 import { useEffect, useState } from 'react'
-import Stat from './stat'
 
 export default function TenantExpire() {
   const [expireTime, setExpireTime] = useState<string>('-')

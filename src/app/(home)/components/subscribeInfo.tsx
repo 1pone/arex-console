@@ -1,5 +1,5 @@
 import { querySubscribeUsage } from '@/app/actions'
-import Stat from './stat'
+import Stat from '@/components/stat'
 
 export default async function SubscribeInfo() {
   const subscribeData = await querySubscribeUsage()
