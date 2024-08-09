@@ -1,3 +1,4 @@
+import TenantToken from '@/app/(home)/settings/tenantToken'
 import { Button } from '@/components/button'
 import { Checkbox, CheckboxField } from '@/components/checkbox'
 import { Divider } from '@/components/divider'
@@ -26,7 +27,7 @@ export default function Settings() {
           <Text>This will be displayed on your public profile.</Text>
         </div>
         <div>
-          <Input aria-label="Organization Name" name="name" defaultValue="Catalyst" />
+          <Input aria-label="Organization Name" name="name" />
         </div>
       </section>
 
@@ -39,6 +40,18 @@ export default function Settings() {
         </div>
         <div>
           <Textarea aria-label="Organization Bio" name="bio" />
+        </div>
+      </section>
+
+      <Divider className="my-10" soft />
+
+      <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+        <div className="space-y-1">
+          <Subheading>Tenant Token</Subheading>
+          <Text>Tenant Token is use for activate AREX Agent</Text>
+        </div>
+        <div>
+          <TenantToken />
         </div>
       </section>
 

@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           pauseOnFocusLoss
           limit={1}
           position="top-right"
-          autoClose={300000}
+          autoClose={3000}
           newestOnTop={false}
           transition={Bounce}
           toastClassName="bg-white dark:bg-zinc-900"

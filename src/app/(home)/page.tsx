@@ -24,7 +24,7 @@ export default async function Home() {
           </Select>
         </div>
       </div>
-      <div className="mt-4 grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-4 grid gap-x-8 gap-y-4 sm:grid-cols-2 xl:grid-cols-4">
         <SubscribeInfo />
         <TenantExpire />
       </div>

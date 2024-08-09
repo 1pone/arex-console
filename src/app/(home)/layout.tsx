@@ -9,6 +9,7 @@ import {
   DropdownLabel,
   DropdownMenu,
 } from '@/components/dropdown'
+import ArexIcon from '@/components/icon/arex'
 import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from '@/components/navbar'
 import {
   Sidebar,
@@ -30,13 +31,7 @@ import {
   ShieldCheckIcon,
   UserCircleIcon,
 } from '@heroicons/react/16/solid'
-import {
-  Cog6ToothIcon,
-  HomeIcon,
-  QuestionMarkCircleIcon,
-  Square2StackIcon,
-  TicketIcon,
-} from '@heroicons/react/20/solid'
+import { Cog6ToothIcon, HomeIcon, QuestionMarkCircleIcon, TicketIcon, UsersIcon } from '@heroicons/react/20/solid'
 import { getCookie } from 'cookies-next'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -102,8 +97,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       sidebar={
         <Sidebar>
           <SidebarHeader>
-            <SidebarItem href="/">
-              <HomeIcon />
+            <SidebarItem href="/" className="group">
+              <ArexIcon />
               <SidebarLabel className="text-lg font-bold">
                 AREX <Text className="inline">Console</Text>
               </SidebarLabel>
@@ -116,9 +111,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <HomeIcon />
                 <SidebarLabel>Home</SidebarLabel>
               </SidebarItem>
-              <SidebarItem href="/events" current={pathname.startsWith('/events')}>
-                <Square2StackIcon />
-                <SidebarLabel>Events</SidebarLabel>
+              <SidebarItem href="/member" current={pathname.startsWith('/member')}>
+                <UsersIcon />
+                <SidebarLabel>Member</SidebarLabel>
               </SidebarItem>
               <SidebarItem href="/orders" current={pathname.startsWith('/orders')}>
                 <TicketIcon />
