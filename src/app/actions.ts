@@ -9,8 +9,11 @@ import {
   TENANT_NAME_KEY,
   TENANT_TOKEN_KEY,
 } from '@/lib/auth'
+import { passwordReg } from '@/lib/utils'
 import http from '@/utils/http'
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import { z } from 'zod'
 
 type LoginRes = {
   success: boolean
@@ -32,10 +35,26 @@ export type QueryTenantRes = {
   }
 }
 
-export const login = async (params: { email: string; password: string }) => {
+export const login = async (formData: FormData) => {
+  const failedReturn = {
+    success: false,
+    message: 'Login failed, please check your email or password.',
+  }
+
+  const schema = z.object({
+    email: z.string().email(),
+    password: z.string().min(6),
+  })
+  const parse = schema.safeParse({
+    password: formData.get('password'),
+    email: formData.get('email'),
+  })
+
+  if (!parse.success) return failedReturn
+
   const data = await http.post<LoginRes>('/api/login/login', {
-    email: params.email,
-    password: params.password,
+    password: parse.data.password,
+    email: parse.data.email,
   })
 
   if (data.success && data.accessToken) {
@@ -47,12 +66,37 @@ export const login = async (params: { email: string; password: string }) => {
       cookies().set(TENANT_CODE_KEY, tenantInfo.user.tenantCode, authCookiesOptions)
       cookies().set(TENANT_TOKEN_KEY, tenantInfo.user.tenantToken, authCookiesOptions)
       cookies().set(TENANT_EXPIRE_KEY, tenantInfo.user.expireTime.toString(), authCookiesOptions)
-      return true
+      return {
+        success: true,
+        message: 'Login Successfully',
+      }
     } catch (e) {
-      return false
+      return failedReturn
     }
   } else {
-    return false
+    return failedReturn
+  }
+}
+
+type RegisterRes = { success: boolean; errorCode: number }
+
+export async function register(params: { email: string; password: string }) {
+  const schema = z.object({
+    email: z.string().email(),
+    password: z.string().regex(passwordReg),
+  })
+
+  const parse = schema.safeParse(params)
+
+  if (!parse.success) {
+    return redirect('/signup/error')
+  } else {
+    const res = await http.post<RegisterRes>('/api/login/register', {
+      ...parse.data,
+    })
+
+    if (res.success) return redirect('/signup/success')
+    else return redirect('/signup/error')
   }
 }
 

@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .Toastify__toast-theme--light,.Toastify__close-button--light {
-    @apply text-zinc-950 dark:text-white
+    @apply text-zinc-950 dark:text-zinc-300 text-sm font-medium
 }
