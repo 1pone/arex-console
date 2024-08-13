@@ -1,6 +1,6 @@
-import { querySubscribeUsage } from '@/app/actions'
 import Stat from '@/components/stat'
 import { formatBytes } from '@/lib/utils'
+import { querySubscribeUsage } from '../actions'
 
 export default async function SubscribeInfo() {
   const subscribeData = await querySubscribeUsage()

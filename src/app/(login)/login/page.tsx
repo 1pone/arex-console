@@ -1,12 +1,12 @@
 'use client'
 
-import { login } from '@/app/actions'
 import { Field, FieldGroup, Label, Legend } from '@/components/fieldset'
 import { Input } from '@/components/input'
 import { Link } from '@/components/link'
 import { Text } from '@/components/text'
 import { redirect } from 'next/navigation'
 import { toast } from 'react-toastify'
+import { login } from '../actions'
 import LoginButton from './loginButton'
 
 export default function Login() {
@@ -23,7 +23,7 @@ export default function Login() {
           <Legend className="">Sign in</Legend>
           <Field>
             <Label>Email</Label>
-            <Input name="email" type="email" autoComplete="email" />
+            <Input required name="email" type="email" autoComplete="email" />
           </Field>
 
           <Field>

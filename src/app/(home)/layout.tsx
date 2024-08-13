@@ -86,7 +86,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <form>
               <Dropdown>
                 <DropdownButton as={NavbarItem}>
-                  <Avatar src="/users/erica.jpg" square />
+                  <Avatar initials={email?.[0]} square />
                 </DropdownButton>
                 <AccountDropdownMenu anchor="bottom end" />
               </Dropdown>
@@ -148,7 +148,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <Dropdown>
               <DropdownButton as={SidebarItem}>
                 <span className="flex min-w-0 items-center gap-3">
-                  <Avatar src="/users/erica.jpg" className="size-10" square alt="" />
+                  <Avatar initials={email?.[0]} className="size-10" square alt="" />
                   <span className="min-w-0">
                     <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white"> {email}</span>
                     <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">

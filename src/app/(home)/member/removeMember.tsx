@@ -1,9 +1,9 @@
 'use client'
 
-import { removeMember } from '@/app/actions'
 import { Button } from '@/components/button'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
+import { removeMember } from '../actions'
 
 export default async function RemoveMember({ email }: { email: string }) {
   const { refresh } = useRouter()

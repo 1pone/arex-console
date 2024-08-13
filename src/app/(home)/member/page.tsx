@@ -1,8 +1,8 @@
-import AddMember from '@/app/(home)/member/addMember'
-import RemoveMember from '@/app/(home)/member/removeMember'
-import { queryMember } from '@/app/actions'
 import { Heading } from '@/components/heading'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/table'
+import { queryMember } from '../actions'
+import AddMember from './addMember'
+import RemoveMember from './removeMember'
 
 export default async function Member() {
   const members = await queryMember()

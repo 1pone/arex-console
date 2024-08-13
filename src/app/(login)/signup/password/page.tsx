@@ -1,6 +1,5 @@
 'use client'
 
-import { register } from '@/app/actions'
 import { Field, FieldGroup, Label, Legend } from '@/components/fieldset'
 import { Input } from '@/components/input'
 import { Link } from '@/components/link'
@@ -10,6 +9,7 @@ import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import { QuestionMarkCircleIcon } from '@heroicons/react/16/solid'
 import { useSearchParams } from 'next/navigation'
 import { useRef } from 'react'
+import { register } from '../../actions'
 import RegisterButton from './registerButton'
 
 export default function SignupPassword() {
@@ -26,7 +26,6 @@ export default function SignupPassword() {
       passwordSecRef.current?.reportValidity() // 为了解决第一次submit不会触发 CustomValidity
     } else {
       passwordSecRef.current?.setCustomValidity('')
-      console.log(formData.get(''), password)
       register({
         email: email as string,
         password: password as string,

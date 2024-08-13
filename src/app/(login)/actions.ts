@@ -11,6 +11,7 @@ import {
 } from '@/lib/auth'
 import { passwordReg } from '@/lib/utils'
 import http from '@/utils/http'
+import { isRedirectError } from 'next/dist/client/components/redirect'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
@@ -43,7 +44,7 @@ export const login = async (formData: FormData) => {
 
   const schema = z.object({
     email: z.string().email(),
-    password: z.string().min(6),
+    password: z.string(),
   })
   const parse = schema.safeParse({
     password: formData.get('password'),
@@ -66,11 +67,10 @@ export const login = async (formData: FormData) => {
       cookies().set(TENANT_CODE_KEY, tenantInfo.user.tenantCode, authCookiesOptions)
       cookies().set(TENANT_TOKEN_KEY, tenantInfo.user.tenantToken, authCookiesOptions)
       cookies().set(TENANT_EXPIRE_KEY, tenantInfo.user.expireTime.toString(), authCookiesOptions)
-      return {
-        success: true,
-        message: 'Login Successfully',
-      }
+      return redirect('/')
     } catch (e) {
+      // https://github.com/vercel/next.js/issues/49298#issuecomment-1537433377
+      if (isRedirectError(e)) throw e
       return failedReturn
     }
   } else {
@@ -98,55 +98,4 @@ export async function register(params: { email: string; password: string }) {
     if (res.success) return redirect('/signup/success')
     else return redirect('/signup/error')
   }
-}
-
-type SubscribeUsage = {
-  errorCode: number
-  memberLimit: number
-  memberUsage: number
-  success: boolean
-  trafficLimitBytes: number
-  trafficUsageBytes: number
-}
-
-export async function querySubscribeUsage() {
-  const data = await http.post<SubscribeUsage>('/api/subscribe/queryUsage', {
-    tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
-  })
-  if (data.success) return data
-}
-
-type Member = {
-  errorCode: 0
-  success: true
-  userEmails: string[]
-}
-
-export async function queryMember() {
-  const data = await http.post<Member>('/api/user/mgnt/queryUserEmails', {
-    tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
-  })
-  if (data.success) return data.userEmails
-  else return []
-}
-
-type AddMemberRes = {
-  errorCode: number
-  success: boolean
-}
-
-export async function addMember(email: string) {
-  const res = await http.post<AddMemberRes>('/api/user/mgnt/addUser', {
-    tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
-    emails: [email],
-  })
-  return res.success
-}
-
-export async function removeMember(email: string) {
-  const res = await http.post<AddMemberRes>('/api/user/mgnt/removeUser', {
-    tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
-    emails: [email],
-  })
-  return res.success
 }

@@ -1,6 +1,5 @@
 'use client'
 
-import { addMember } from '@/app/actions'
 import { Button } from '@/components/button'
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/dialog'
 import { Field, Label } from '@/components/fieldset'
@@ -9,6 +8,7 @@ import { UserPlusIcon } from '@heroicons/react/16/solid'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
+import { addMember } from '../actions'
 
 export default function AddMember() {
   const [open, setOpen] = useState(false)
