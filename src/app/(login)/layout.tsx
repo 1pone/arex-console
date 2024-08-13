@@ -1,6 +1,7 @@
 import { Card } from '@/components/card'
+import LoadingIcon from '@/components/icon/loading'
 import { Text } from '@/components/text'
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren, Suspense } from 'react'
 
 export default function Layout(props: PropsWithChildren) {
   return (
@@ -12,7 +13,7 @@ export default function Layout(props: PropsWithChildren) {
             <Text className="ml-2 inline font-semibold">Console</Text>
           </div>
         </div>
-        {props.children}
+        <Suspense fallback={<LoadingIcon />}>{props.children}</Suspense>
       </Card>
     </div>
   )
