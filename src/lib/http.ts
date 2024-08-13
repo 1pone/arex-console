@@ -1,7 +1,5 @@
 import { cookies } from 'next/headers'
 
-const BASE_URL = 'https://cloud.arextest.com'
-
 type ResponseType<T> = {
   responseStatusType: {
     responseCode: number
@@ -25,7 +23,7 @@ export const ResponseCode = {
 
 async function http<T>(url: string, options?: RequestInit): Promise<T> {
   try {
-    const response = await fetch(BASE_URL + url, {
+    const response = await fetch(process.env.BASE_URL + url, {
       ...options,
       headers: {
         ...options?.headers,

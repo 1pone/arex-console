@@ -16,7 +16,7 @@ export default function Error() {
 
   return (
     <>
-      <ExclamationCircleIcon className="w-16" />
+      <ExclamationCircleIcon />
       Oops, Sign up failed, please try again...
       <Button href="/signup" className="mt-8">
         Back to Signup

@@ -1,7 +1,7 @@
 'use server'
 
 import { TENANT_CODE_KEY } from '@/lib/auth'
-import http from '@/utils/http'
+import http from '@/lib/http'
 import { cookies } from 'next/headers'
 
 type SubscribeUsage = {

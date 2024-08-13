@@ -9,8 +9,8 @@ import {
   TENANT_NAME_KEY,
   TENANT_TOKEN_KEY,
 } from '@/lib/auth'
+import http from '@/lib/http'
 import { passwordReg } from '@/lib/utils'
-import http from '@/utils/http'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
