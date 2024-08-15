@@ -136,3 +136,25 @@ export async function bindTenant(formData: FormData) {
   if (!res.success) return res
   else redirect(`/signup/success`)
 }
+
+export async function sendResetPasswordEmail(email: string) {
+  const schema = z.string().email()
+
+  const parse = schema.safeParse(email)
+
+  if (!parse.success)
+    return {
+      success: false,
+      errorCode: ErrorCodeEnum.ParameterParsingError,
+    }
+
+  try {
+    const success = await http.post<boolean>('/api/login/sendResetPwdEmail', {
+      email: parse.data,
+    })
+    if (success) redirect('/account/reset/send-verify-email')
+  } catch (e) {
+    if (isRedirectError(e)) throw e
+    return { success: false, errorCode: (e as Error).message }
+  }
+}

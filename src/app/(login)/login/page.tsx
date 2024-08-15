@@ -38,7 +38,7 @@ export default function Login() {
               {/*  Remember <span className="hidden sm:inline"> me</span>*/}
               {/*</Label>*/}
             </Field>
-            <Link href="#" className="font-semibold">
+            <Link href="/account/reset" className="font-semibold">
               Forgot password?
             </Link>
           </div>
