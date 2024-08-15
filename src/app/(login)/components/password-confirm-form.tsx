@@ -56,7 +56,7 @@ export default function PasswordConfirmForm(props: PasswordConfirmFormProps) {
 
           <Field hidden>
             <Label>Access Token</Label>
-            <Input required name="accessToken" defaultValue={props.accessToken} />
+            <Input name="accessToken" defaultValue={props.accessToken} />
           </Field>
 
           <Field hidden>
