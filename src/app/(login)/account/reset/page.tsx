@@ -10,7 +10,7 @@ import { toast } from 'react-toastify'
 export default function AccountReset() {
   async function handleResetAccount(formData: FormData) {
     const res = await sendResetPasswordEmail(formData.get('email') as string)
-    if (!res.success) res.errorCode && toast.error(ErrorCode[res.errorCode.toString()])
+    if (!res?.success) res?.errorCode && toast.error(ErrorCode[res?.errorCode.toString()])
   }
   return (
     <form action={handleResetAccount} className="w-full max-w-sm space-y-8">
