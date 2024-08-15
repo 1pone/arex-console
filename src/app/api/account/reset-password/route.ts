@@ -1,11 +1,8 @@
+import { verify } from '@/app/(login)/actions'
 import { redirect } from 'next/navigation'
 import { NextRequest } from 'next/server'
 
 export async function GET(request: NextRequest) {
-  const upn = request.nextUrl.searchParams.get('upn')
-
-  if (upn) {
-    console.log(upn)
-    redirect('/verify/success')
-  } else redirect('/verify/error')
+  const { success, accessToken } = await verify(request.nextUrl.searchParams.get('upn'))
+  if (success) redirect(`/account/reset/password?token=${accessToken}`)
 }

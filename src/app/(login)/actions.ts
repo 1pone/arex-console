@@ -17,11 +17,17 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
-type LoginRes = {
-  success: boolean
-  errorCode: number
-  accessToken: string
-}
+type LoginRes =
+  | {
+      success: true
+      errorCode: null
+      accessToken: string
+    }
+  | {
+      success: false
+      errorCode: number
+      accessToken: null
+    }
 
 export type QueryTenantRes = {
   success: boolean
@@ -79,9 +85,28 @@ export const login = async (formData: FormData) => {
   }
 }
 
+type VerifyRes =
+  | { success: true; errorCode: number; accessToken: string }
+  | { success: false; errorCode: number; accessToken: null }
+
+export async function verify(upn?: string | null) {
+  if (upn) {
+    const res = await http.post<VerifyRes>('/api/login/verify', {
+      upn,
+    })
+    if (res.success) {
+      return Promise.resolve(res)
+    } else {
+      redirect(`/verify/error?code=${res.errorCode}`)
+    }
+  } else {
+    redirect('/verify/error')
+  }
+}
+
 type RegisterRes = { success: boolean; errorCode: number }
 
-export async function register(params: { email: string; password: string }) {
+export async function register(params: { email?: string; password?: string }) {
   const schema = z.object({
     email: z.string().email(),
     password: z.string().regex(passwordReg),
@@ -156,5 +181,42 @@ export async function sendResetPasswordEmail(email: string) {
   } catch (e) {
     if (isRedirectError(e)) throw e
     return { success: false, errorCode: (e as Error).message }
+  }
+}
+
+export async function resetPassword(params: { password: string; accessToken?: string }) {
+  const schema = z.object({
+    password: z.string().regex(passwordReg),
+    accessToken: z.string().min(1),
+  })
+
+  const parse = schema.safeParse(params)
+
+  if (!parse.success) {
+    return {
+      success: false,
+      errorCode: ErrorCodeEnum.ParameterParsingError,
+    }
+  } else {
+    try {
+      const success = await http.post<boolean>(
+        '/api/login/resetPassword',
+        {
+          password: parse.data.password,
+        },
+        {
+          headers: {
+            'access-token': parse.data.accessToken,
+          },
+        }
+      )
+
+      if (success) {
+        redirect('/account/reset/success')
+      }
+    } catch (e) {
+      if (isRedirectError(e)) throw e
+      else return { success: false, errorCode: (e as Error).message }
+    }
   }
 }
