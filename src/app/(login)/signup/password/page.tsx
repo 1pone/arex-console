@@ -1,16 +1,15 @@
 'use client'
 
 import { Field, FieldGroup, Label, Legend } from '@/components/fieldset'
+import HelpTooltip from '@/components/help-tooltip'
 import { Input } from '@/components/input'
 import { Link } from '@/components/link'
+import SubmitButton from '@/components/submit-button'
 import { Text } from '@/components/text'
 import { passwordRegStr } from '@/lib/utils'
-import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
-import { QuestionMarkCircleIcon } from '@heroicons/react/16/solid'
 import { useSearchParams } from 'next/navigation'
 import { useRef } from 'react'
 import { register } from '../../actions'
-import RegisterButton from './registerButton'
 
 export default function SignupPassword() {
   const searchParams = useSearchParams()
@@ -43,18 +42,7 @@ export default function SignupPassword() {
               <Text className="mt-2 inline !leading-5 tracking-tighter">
                 Setting a password with a high level of security
               </Text>
-              <Popover className="relative inline">
-                <PopoverButton className="ml-1.5 inline h-2.5 w-3 text-black/50 focus:outline-none data-[active]:text-black data-[hover]:text-black data-[focus]:outline-1 data-[focus]:outline-black dark:text-white/50 dark:data-[active]:text-white dark:data-[hover]:text-white dark:data-[focus]:outline-white">
-                  <QuestionMarkCircleIcon />
-                </PopoverButton>
-                <PopoverPanel
-                  transition
-                  anchor="right"
-                  className="ml-2 w-60 divide-y divide-white/5 rounded-xl bg-black/5 px-3 py-2 text-sm transition duration-200 ease-in-out data-[closed]:-translate-y-1 data-[closed]:opacity-0 dark:bg-white/5"
-                >
-                  Minimum eight characters, at least one letter and one number
-                </PopoverPanel>
-              </Popover>
+              <HelpTooltip>Minimum eight characters, at least one letter and one number</HelpTooltip>
             </div>
           </div>
 
@@ -93,7 +81,12 @@ export default function SignupPassword() {
             />
           </Field>
 
-          <RegisterButton />
+          <SubmitButton
+            title={{
+              normal: 'Register Now',
+              pending: 'Registering...',
+            }}
+          />
 
           <div className="flex gap-1">
             <Text>Already have an account?</Text>

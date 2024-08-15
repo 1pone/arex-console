@@ -3,11 +3,11 @@
 import { Field, FieldGroup, Label, Legend } from '@/components/fieldset'
 import { Input } from '@/components/input'
 import { Link } from '@/components/link'
+import SubmitButton from '@/components/submit-button'
 import { Text } from '@/components/text'
 import { redirect } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { login } from '../actions'
-import LoginButton from './loginButton'
 
 export default function Login() {
   async function handleLogin(formData: FormData) {
@@ -43,7 +43,12 @@ export default function Login() {
             </Link>
           </div>
 
-          <LoginButton />
+          <SubmitButton
+            title={{
+              normal: 'Sign in',
+              pending: 'Signing in...',
+            }}
+          />
 
           <div className="flex gap-1">
             <Text>Don’t have an account?</Text>

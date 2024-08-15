@@ -1,5 +1,6 @@
 'use server'
 
+import { ErrorCodeEnum } from '@/constant'
 import {
   ACCESS_TOKEN_KEY,
   authCookiesOptions,
@@ -95,7 +96,43 @@ export async function register(params: { email: string; password: string }) {
       ...parse.data,
     })
 
-    if (res.success) return redirect('/signup/success')
+    if (res.success) return redirect('/signup/almost/success')
     else return redirect('/signup/error')
   }
+}
+
+export async function bindTenant(formData: FormData) {
+  const schema = z.object({
+    accessToken: z.string(),
+    tenantName: z.string().min(2),
+    tenantCode: z.string().min(2),
+  })
+
+  const parse = schema.safeParse({
+    accessToken: formData.get('accessToken'),
+    tenantName: formData.get('tenantName'),
+    tenantCode: formData.get('tenantCode'),
+  })
+
+  if (!parse.success)
+    return {
+      success: false,
+      errorCode: ErrorCodeEnum.ParameterParsingError,
+    }
+
+  const res = await http.post<LoginRes>(
+    '/api/login/bind',
+    {
+      tenantName: parse.data.tenantName,
+      tenantCode: parse.data.tenantCode,
+    },
+    {
+      headers: {
+        'access-token': parse.data.accessToken,
+      },
+    }
+  )
+
+  if (!res.success) return res
+  else redirect(`/signup/success`)
 }

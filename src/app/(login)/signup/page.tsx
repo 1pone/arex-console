@@ -1,7 +1,7 @@
-import { Button } from '@/components/button'
 import { Field, FieldGroup, Label, Legend } from '@/components/fieldset'
 import { Input } from '@/components/input'
 import { Link } from '@/components/link'
+import SubmitButton from '@/components/submit-button'
 import { Text } from '@/components/text'
 
 export default function Signup() {
@@ -15,9 +15,8 @@ export default function Signup() {
             <Input required name="email" type="email" />
           </Field>
 
-          <Button type="submit" className="w-full">
-            Next
-          </Button>
+          <SubmitButton title="Next" />
+
           <div className="flex gap-1">
             <Text>Already have an account?</Text>
             <Link href="/login" className="font-semibold">

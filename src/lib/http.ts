@@ -1,3 +1,4 @@
+import { ResponseCodeMap } from '@/constant'
 import { cookies } from 'next/headers'
 
 type ResponseType<T> = {
@@ -9,29 +10,17 @@ type ResponseType<T> = {
   body: T
 }
 
-export const ResponseCode = {
-  SUCCESS: 0,
-  REQUESTED_PARAMETER_INVALID: 1,
-  REQUESTED_HANDLE_EXCEPTION: 2,
-  REQUESTED_RESOURCE_NOT_FOUND: 3,
-  AUTHENTICATION_FAILED: 4,
-
-  APP_AUTH_NO_APP_ID: 105001,
-  APP_AUTH_ERROR_APP_ID: 105002,
-  APP_AUTH_NO_PERMISSION: 105003,
-}
-
 async function http<T>(url: string, options?: RequestInit): Promise<T> {
   try {
     const response = await fetch(process.env.BASE_URL + url, {
       ...options,
       headers: {
-        ...options?.headers,
         'access-token': cookies().get('access-token')?.value || '',
+        ...options?.headers,
       },
     })
     const responseJson = (await response.json()) as ResponseType<Promise<T>>
-    if (responseJson.responseStatusType.responseCode === ResponseCode.SUCCESS) {
+    if (responseJson.responseStatusType.responseCode === ResponseCodeMap.SUCCESS) {
       return responseJson.body
     } else {
       throw new Error(responseJson.responseStatusType.responseCode.toString())
