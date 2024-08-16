@@ -98,7 +98,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Sidebar>
           <SidebarHeader>
             <SidebarItem href="/" className="group">
-              <ArexIcon />
+              <ArexIcon className="grayscale group-hover:brightness-100 group-hover:grayscale-0 dark:brightness-150" />
               <SidebarLabel className="text-lg font-bold">
                 AREX <Text className="inline">Console</Text>
               </SidebarLabel>

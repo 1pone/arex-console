@@ -1,0 +1,55 @@
+import { getTenantInfo } from '@/app/(login)/actions'
+import { ACCESS_TOKEN_KEY, authCookiesOptions } from '@/lib/auth'
+import http from '@/lib/http'
+import { isRedirectError } from 'next/dist/client/components/redirect'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import { NextRequest, NextResponse } from 'next/server'
+
+type OauthLoginRes =
+  | {
+      success: true
+      errorCode: number
+      accessToken: string
+      needBind: true
+      email: null
+    }
+  | {
+      success: true
+      errorCode: number
+      accessToken: string
+      needBind: false
+      email: string
+    }
+  | {
+      success: false
+      errorCode: number
+      accessToken: string
+      needBind: false
+      email: null
+    }
+
+export async function GET(request: NextRequest, response: NextResponse) {
+  const searchParams = request.nextUrl.searchParams
+  const body = {
+    code: searchParams.get('code'),
+    redirectUri: request.nextUrl.origin + '/api/oauth',
+    oauthType: 1,
+  }
+  try {
+    const res = await http.post<OauthLoginRes>(`/api/login/oauthLogin`, body)
+    if (res.success) {
+      if (res.needBind) {
+        redirect(`/signup/bind?token=${res.accessToken}`)
+      } else {
+        cookies().set(ACCESS_TOKEN_KEY, res.accessToken, authCookiesOptions)
+        const infoRes = await getTenantInfo()
+        if (!infoRes.success) redirect('/verify/error')
+      }
+    } else {
+      redirect('/verify/error')
+    }
+  } catch (e) {
+    if (isRedirectError(e)) throw e
+  }
+}

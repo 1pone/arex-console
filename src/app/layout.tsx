@@ -30,7 +30,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           transition={Bounce}
           toastClassName="bg-white dark:bg-zinc-900"
         />
-
         {children}
       </body>
     </html>

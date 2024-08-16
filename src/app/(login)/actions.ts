@@ -43,12 +43,12 @@ export type QueryTenantRes = {
   }
 }
 
-export const login = async (formData: FormData) => {
-  const failedReturn = {
-    success: false,
-    message: 'Login failed, please check your email or password.',
-  }
+const loginFailedReturn = {
+  success: false,
+  message: 'Login failed, please check your email or password.',
+}
 
+export const login = async (formData: FormData) => {
   const schema = z.object({
     email: z.string().email(),
     password: z.string(),
@@ -58,7 +58,7 @@ export const login = async (formData: FormData) => {
     email: formData.get('email'),
   })
 
-  if (!parse.success) return failedReturn
+  if (!parse.success) return loginFailedReturn
 
   const data = await http.post<LoginRes>('/api/login/login', {
     password: parse.data.password,
@@ -67,21 +67,26 @@ export const login = async (formData: FormData) => {
 
   if (data.success && data.accessToken) {
     cookies().set(ACCESS_TOKEN_KEY, data.accessToken, authCookiesOptions)
-    try {
-      const tenantInfo = await http.post<QueryTenantRes>('/api/login/queryTenant')
-      cookies().set(EMAIL_KEY, tenantInfo.user.email, authCookiesOptions)
-      cookies().set(TENANT_NAME_KEY, tenantInfo.user.tenantName, authCookiesOptions)
-      cookies().set(TENANT_CODE_KEY, tenantInfo.user.tenantCode, authCookiesOptions)
-      cookies().set(TENANT_TOKEN_KEY, tenantInfo.user.tenantToken, authCookiesOptions)
-      cookies().set(TENANT_EXPIRE_KEY, tenantInfo.user.expireTime.toString(), authCookiesOptions)
-      return redirect('/')
-    } catch (e) {
-      // https://github.com/vercel/next.js/issues/49298#issuecomment-1537433377
-      if (isRedirectError(e)) throw e
-      return failedReturn
-    }
+    return await getTenantInfo()
   } else {
-    return failedReturn
+    return loginFailedReturn
+  }
+}
+
+export async function getTenantInfo() {
+  if (!cookies().get(ACCESS_TOKEN_KEY)) return loginFailedReturn
+  try {
+    const tenantInfo = await http.post<QueryTenantRes>('/api/login/queryTenant')
+    cookies().set(EMAIL_KEY, tenantInfo.user.email, authCookiesOptions)
+    cookies().set(TENANT_NAME_KEY, tenantInfo.user.tenantName, authCookiesOptions)
+    cookies().set(TENANT_CODE_KEY, tenantInfo.user.tenantCode, authCookiesOptions)
+    cookies().set(TENANT_TOKEN_KEY, tenantInfo.user.tenantToken, authCookiesOptions)
+    cookies().set(TENANT_EXPIRE_KEY, tenantInfo.user.expireTime.toString(), authCookiesOptions)
+    return redirect('/')
+  } catch (e) {
+    // https://github.com/vercel/next.js/issues/49298#issuecomment-1537433377
+    if (isRedirectError(e)) throw e
+    return loginFailedReturn
   }
 }
 
@@ -158,6 +163,7 @@ export async function bindTenant(formData: FormData) {
     }
   )
 
+  console.log(res)
   if (!res.success) return res
   else redirect(`/signup/success`)
 }

@@ -20,7 +20,7 @@ export default function SubmitButton(props: SubmitButtonProps) {
     <Button
       {...restProps}
       type="submit"
-      className={clsx(className, '!mt-12 w-full')}
+      className={clsx(className, '!mt-8 w-full')}
       // @ts-ignore
       disabled={pending}
     >

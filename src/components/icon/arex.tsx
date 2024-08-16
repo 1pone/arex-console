@@ -1,6 +1,9 @@
-export default function ArexIcon() {
+import clsx from 'clsx'
+import { HTMLProps } from 'react'
+
+export default function ArexIcon(props: HTMLProps<HTMLDivElement>) {
   return (
-    <div className="arex-logo-icon h-4 scale-110 grayscale group-hover:brightness-100 group-hover:grayscale-0 dark:brightness-150">
+    <div {...props} className={clsx('arex-logo-icon h-4 scale-110', props.className)}>
       <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="20" height="16" viewBox="380 280 500 480">
         <g transform="matrix(1 0 0 1 640 512)" id="background-logo"></g>
         <g
