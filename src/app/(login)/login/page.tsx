@@ -69,7 +69,7 @@ export default function Login() {
           </Button>
 
           <div className="float-right mt-2 flex gap-1">
-            <Text>Don’t have an account?</Text>
+            <Text>Don&#39;t have an account?</Text>
             <Link href="/signup" className="font-semibold">
               Sign up
             </Link>
