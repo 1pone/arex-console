@@ -163,7 +163,6 @@ export async function bindTenant(formData: FormData) {
     }
   )
 
-  console.log(res)
   if (!res.success) return res
   else redirect(`/signup/success`)
 }

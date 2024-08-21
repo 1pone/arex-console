@@ -31,7 +31,7 @@ export default function Bind() {
 
           <Field>
             <Label>Tenant Name</Label>
-            <Input required minLength={2} name="tenantName" />
+            <Input required minLength={2} maxLength={63} name="tenantName" />
           </Field>
 
           <Field>
@@ -42,7 +42,7 @@ export default function Bind() {
               </HelpTooltip>
             </Label>
             <div className="mt-3 flex">
-              <Input minLength={2} name="tenantCode" />
+              <Input minLength={2} pattern="^[a-zA-Z\-]{2,61}$" name="tenantCode" />
               <Text className="ps-2 !text-sm/8">.arextest.com</Text>
             </div>
           </Field>
