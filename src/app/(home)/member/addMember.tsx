@@ -4,6 +4,7 @@ import { Button } from '@/components/button'
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/dialog'
 import { Field, Label } from '@/components/fieldset'
 import { Input } from '@/components/input'
+import { ErrorCode } from '@/constant'
 import { UserPlusIcon } from '@heroicons/react/16/solid'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -15,13 +16,13 @@ export default function AddMember() {
   const { refresh } = useRouter()
 
   const handleAddMember = async (formData: FormData) => {
-    const success = await addMember(formData.get('email') as string)
+    const { success, errorCode } = await addMember(formData.get('email') as string)
     if (success) {
       toast.success('Add successfully')
       setOpen(false)
       refresh()
     } else {
-      toast.error('Add failed, please try again')
+      toast.error(ErrorCode[String(errorCode)])
     }
   }
   return (

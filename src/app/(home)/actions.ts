@@ -40,11 +40,17 @@ type AddMemberRes = {
 }
 
 export async function addMember(email: string) {
-  const res = await http.post<AddMemberRes>('/api/user/mgnt/addUser', {
-    tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
-    emails: [email],
-  })
-  return res.success
+  try {
+    return await http.post<AddMemberRes>('/api/user/mgnt/addUser', {
+      tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
+      emails: [email],
+    })
+  } catch (errorCode: unknown) {
+    return {
+      success: false,
+      errorCode,
+    }
+  }
 }
 
 export async function removeMember(email: string) {

@@ -25,9 +25,9 @@ async function http<T>(url: string, options?: RequestInit): Promise<T> {
     } else {
       throw new Error(responseJson.responseStatusType.responseCode.toString())
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error(console.error('Fetch failed:', error))
-    throw error
+    throw error?.message
   }
 }
 

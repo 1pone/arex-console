@@ -27,6 +27,7 @@ export const ErrorCode: Record<string, string> = {
   '1011': 'Init user error',
   '1012': 'Package not existed',
   '1013': 'Email format error',
+  '1019': 'Email already exit',
   // used for frontend
   [ErrorCodeEnum.ParameterParsingError]: 'Parameter parsing error',
 }
