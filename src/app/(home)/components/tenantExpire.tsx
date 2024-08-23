@@ -12,5 +12,5 @@ export default function TenantExpire() {
     setExpireTime(new Date(Number(tenantExpire)).toLocaleDateString())
   }, [])
 
-  return <Stat title="Free Plan" value={`Exp: ${expireTime}`} href="/orders" />
+  return <Stat title="Free Plan" value={`Exp: ${expireTime}`} href="#" />
 }
