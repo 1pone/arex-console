@@ -2,5 +2,5 @@ import { fetchClientDownloadData, setClientDownloadData } from '@/app/(home)/dow
 
 export async function register() {
   const data = await fetchClientDownloadData()
-  setClientDownloadData(data)
+  data && setClientDownloadData(data)
 }
