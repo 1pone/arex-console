@@ -1,14 +1,7 @@
 'use client'
 
 import { Avatar } from '@/components/avatar'
-import {
-  Dropdown,
-  DropdownButton,
-  DropdownDivider,
-  DropdownItem,
-  DropdownLabel,
-  DropdownMenu,
-} from '@/components/dropdown'
+import { Dropdown, DropdownButton, DropdownItem, DropdownLabel, DropdownMenu } from '@/components/dropdown'
 import ArexIcon from '@/components/icon/arex'
 import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from '@/components/navbar'
 import {
@@ -19,19 +12,12 @@ import {
   SidebarItem,
   SidebarLabel,
   SidebarSection,
-  SidebarSpacer,
 } from '@/components/sidebar'
 import { SidebarLayout } from '@/components/sidebar-layout'
 import { Text } from '@/components/text'
 import { EMAIL_KEY, TENANT_NAME_KEY } from '@/lib/auth'
-import {
-  ArrowRightStartOnRectangleIcon,
-  ChevronUpIcon,
-  LightBulbIcon,
-  ShieldCheckIcon,
-  UserCircleIcon,
-} from '@heroicons/react/16/solid'
-import { Cog6ToothIcon, HomeIcon, QuestionMarkCircleIcon, TicketIcon, UsersIcon } from '@heroicons/react/20/solid'
+import { ArrowRightStartOnRectangleIcon, ChevronUpIcon } from '@heroicons/react/16/solid'
+import { Cog6ToothIcon, HomeIcon, UsersIcon } from '@heroicons/react/20/solid'
 import { getCookie } from 'cookies-next'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -41,20 +27,20 @@ function AccountDropdownMenu({ anchor }: { anchor: 'top start' | 'bottom end' })
     <>
       <DropdownMenu className="min-w-64" anchor={anchor}>
         <form className="contents">
-          <DropdownItem href="#">
-            <UserCircleIcon />
-            <DropdownLabel>My account</DropdownLabel>
-          </DropdownItem>
-          <DropdownDivider />
-          <DropdownItem href="#">
-            <ShieldCheckIcon />
-            <DropdownLabel>Privacy policy</DropdownLabel>
-          </DropdownItem>
-          <DropdownItem href="#">
-            <LightBulbIcon />
-            <DropdownLabel>Share feedback</DropdownLabel>
-          </DropdownItem>
-          <DropdownDivider />
+          {/*<DropdownItem href="#">*/}
+          {/*  <UserCircleIcon />*/}
+          {/*  <DropdownLabel>My account</DropdownLabel>*/}
+          {/*</DropdownItem>*/}
+          {/*<DropdownDivider />*/}
+          {/*<DropdownItem href="#">*/}
+          {/*  <ShieldCheckIcon />*/}
+          {/*  <DropdownLabel>Privacy policy</DropdownLabel>*/}
+          {/*</DropdownItem>*/}
+          {/*<DropdownItem href="#">*/}
+          {/*  <LightBulbIcon />*/}
+          {/*  <DropdownLabel>Share feedback</DropdownLabel>*/}
+          {/*</DropdownItem>*/}
+          {/*<DropdownDivider />*/}
 
           <DropdownItem type={undefined} formAction="/api/logout">
             <ArrowRightStartOnRectangleIcon />
@@ -115,10 +101,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <UsersIcon />
                 <SidebarLabel>Member</SidebarLabel>
               </SidebarItem>
-              <SidebarItem href="/orders" current={pathname.startsWith('/orders')}>
-                <TicketIcon />
-                <SidebarLabel>Orders</SidebarLabel>
-              </SidebarItem>
+              {/*<SidebarItem href="/orders" current={pathname.startsWith('/orders')}>*/}
+              {/*  <TicketIcon />*/}
+              {/*  <SidebarLabel>Orders</SidebarLabel>*/}
+              {/*</SidebarItem>*/}
               <SidebarItem href="/settings" current={pathname.startsWith('/settings')}>
                 <Cog6ToothIcon />
                 <SidebarLabel>Settings</SidebarLabel>
@@ -134,14 +120,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             {/*  ))}*/}
             {/*</SidebarSection>*/}
 
-            <SidebarSpacer />
+            {/*<SidebarSpacer />*/}
 
-            <SidebarSection>
-              <SidebarItem href="#">
-                <QuestionMarkCircleIcon />
-                <SidebarLabel>Support</SidebarLabel>
-              </SidebarItem>
-            </SidebarSection>
+            {/*<SidebarSection>*/}
+            {/*  <SidebarItem href="#">*/}
+            {/*    <QuestionMarkCircleIcon />*/}
+            {/*    <SidebarLabel>Support</SidebarLabel>*/}
+            {/*  </SidebarItem>*/}
+            {/*</SidebarSection>*/}
           </SidebarBody>
 
           <SidebarFooter className="max-lg:hidden">
