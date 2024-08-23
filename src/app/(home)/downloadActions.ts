@@ -57,17 +57,21 @@ export type ClientDownloadUrlData = {
 }
 
 export async function fetchClientDownloadData() {
-  const latest = await fetch(
-    `https://api.github.com/repos/arextest/releases/releases/latest?access_token=${process.env.GH_TOKEN}`,
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.GH_TOKEN}`,
-      },
-    },
-  )
-  const data: ClientDownloadUrlData = await latest.json()
-  ;(globalThis as any).clientDownloadData = data // https://github.com/vercel/next.js/discussions/15341#discussioncomment-8608211
-  return data
+  try {
+    const latest = await fetch(
+      `https://api.github.com/repos/arextest/releases/releases/latest?access_token=${process.env.GH_TOKEN}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.GH_TOKEN}`,
+        },
+      }
+    )
+    const data: ClientDownloadUrlData = await latest.json()
+    ;(globalThis as any).clientDownloadData = data // https://github.com/vercel/next.js/discussions/15341#discussioncomment-8608211
+    return data
+  } catch (e) {
+    console.error(String(e))
+  }
 }
 
 export async function setClientDownloadData(data: ClientDownloadUrlData) {
