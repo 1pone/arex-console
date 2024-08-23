@@ -164,7 +164,11 @@ export async function bindTenant(formData: FormData) {
   )
 
   if (!res.success) return res
-  else redirect(`/signup/success`)
+  else {
+    cookies().set(ACCESS_TOKEN_KEY, res.accessToken, authCookiesOptions)
+    await getTenantInfo()
+    redirect(`/signup/success`)
+  }
 }
 
 export async function sendResetPasswordEmail(email: string) {

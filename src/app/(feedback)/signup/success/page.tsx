@@ -4,7 +4,7 @@ import useDelayRedirect from '@/hooks/useDelayRedirect'
 import { CheckCircleIcon } from '@heroicons/react/16/solid'
 
 export default function Success() {
-  useDelayRedirect('/login', 3000)
+  useDelayRedirect('/', 3000)
 
   return (
     <>

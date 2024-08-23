@@ -21,7 +21,6 @@ export default async function DownloadClient() {
       </div>
 
       <div className="flex flex-col items-center">
-        <div className="my-4 text-2xl font-medium">Download AREX Client</div>
         <div className="flex flex-1 flex-col justify-center">
           <DownloadButton assets={clientDownloadData?.assets} />
           <TextLink href="https://github.com/arextest/releases/releases" target="_blank" className="ml-auto">

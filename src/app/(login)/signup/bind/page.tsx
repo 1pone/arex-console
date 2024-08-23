@@ -42,7 +42,7 @@ export default function Bind() {
               </HelpTooltip>
             </Label>
             <div className="mt-3 flex">
-              <Input minLength={2} pattern="^[a-zA-Z\-]{2,61}$" name="tenantCode" />
+              <Input minLength={2} pattern="^[a-zA-Z0-9\-]{2,61}$" name="tenantCode" />
               <Text className="ps-2 !text-sm/8">.arextest.com</Text>
             </div>
           </Field>
