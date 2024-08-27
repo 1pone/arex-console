@@ -30,10 +30,15 @@ type OauthLoginRes =
     }
 
 export async function GET(request: NextRequest, response: NextResponse) {
+  console.log(request.headers)
   const searchParams = request.nextUrl.searchParams
 
   const code = searchParams.get('code')
-  const redirectUri = request.headers.get('x-forwarded-proto') + '://' + request.headers.get('x-forwarded-for')
+  const redirectUri =
+    (request.headers.get('x-forwarded-proto') || 'https') +
+    '://' +
+    request.headers.get('x-forwarded-host') +
+    '/api/oauth'
 
   const body = {
     code,
