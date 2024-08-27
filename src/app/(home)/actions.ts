@@ -17,6 +17,7 @@ export async function querySubscribeUsage() {
   const data = await http.post<SubscribeUsage>('/api/subscribe/queryUsage', {
     tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
   })
+  console.log(data)
   if (data.success) return data
 }
 

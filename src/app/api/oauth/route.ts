@@ -31,14 +31,17 @@ type OauthLoginRes =
 
 export async function GET(request: NextRequest, response: NextResponse) {
   const searchParams = request.nextUrl.searchParams
+  const redirectUri = request.headers.get('referer') + 'api/oauth'
   const body = {
-    code: decodeURIComponent(searchParams.get('code') || ''),
-    redirectUri: request.nextUrl.origin + '/api/oauth',
+    code: searchParams.get('code'),
+    redirectUri,
     oauthType: 1,
   }
   try {
     const res = await http.post<OauthLoginRes>(`/api/login/oauthLogin`, body)
-    console.log(body, res)
+
+    console.log({ body, res })
+
     if (res.success) {
       if (res.needBind) {
         redirect(`/signup/bind?token=${res.accessToken}`)
