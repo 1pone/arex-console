@@ -10,7 +10,7 @@ export default async function SubscribeInfo() {
       <Stat
         title="Traffic"
         value={`${formatBytes(subscribeData?.trafficUsageBytes)} / ${formatBytes(subscribeData?.trafficLimitBytes)}`}
-        change="+12%"
+        // change="+12%"
       />
 
       <Stat href="/member" title="Member" value={`${subscribeData?.memberUsage} / ${subscribeData?.memberLimit}`} />
