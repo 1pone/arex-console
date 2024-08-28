@@ -1,12 +1,13 @@
 'use client'
 
+import PasswordStrengthHit from '@/app/(login)/components/password-strength-hit'
 import { Field, FieldGroup, Label, Legend } from '@/components/fieldset'
-import HelpTooltip from '@/components/help-tooltip'
 import { Input } from '@/components/input'
 import SubmitButton, { SubmitButtonProps } from '@/components/submit-button'
 import { Text } from '@/components/text'
-import { passwordRegStr } from '@/lib/utils'
-import { ReactNode, useRef } from 'react'
+import { passwordReg } from '@/lib/utils'
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
+import { Fragment, ReactNode, useState } from 'react'
 
 type ActionParams = { email?: string; password: string; accessToken?: string }
 export type PasswordConfirmFormProps = {
@@ -19,19 +20,21 @@ export type PasswordConfirmFormProps = {
 }
 
 export default function PasswordConfirmForm(props: PasswordConfirmFormProps) {
-  const passwordRef = useRef<HTMLInputElement>(null)
-  const passwordSecRef = useRef<HTMLInputElement>(null)
+  const [password, setPassword] = useState('')
+
+  const [passwordInvalid, setPasswordInvalid] = useState(false)
+  const [passwordSecInvalid, setPasswordSecInvalid] = useState(false)
 
   function action(formData: FormData) {
-    const email = formData.get('email')
-    const password = formData.get('password')
-    const accessToken = formData.get('accessToken')
-    const passwordSec = formData.get('password-sec')
-    if (password !== passwordSec) {
-      passwordSecRef.current?.setCustomValidity('The passwords do not match')
-      passwordSecRef.current?.reportValidity() // 为了解决第一次submit不会触发 CustomValidity
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+    const accessToken = formData.get('accessToken') as string
+    const passwordSec = formData.get('password-sec') as string
+    if (!passwordReg.test(password || '')) {
+      setPasswordInvalid(true)
+    } else if (password !== passwordSec) {
+      setPasswordSecInvalid(true)
     } else {
-      passwordSecRef.current?.setCustomValidity('')
       props.action({
         email,
         password,
@@ -47,10 +50,7 @@ export default function PasswordConfirmForm(props: PasswordConfirmFormProps) {
           <div>
             <Legend>{props.title}</Legend>
             <div>
-              <Text className="mt-2 inline !leading-5 tracking-tighter">
-                Setting a password with a high level of security
-              </Text>
-              <HelpTooltip>Minimum eight characters, at least one letter and one number</HelpTooltip>
+              <Text className="mt-2 inline !leading-5">Setting a password with a high level of security</Text>
             </div>
           </div>
 
@@ -66,32 +66,41 @@ export default function PasswordConfirmForm(props: PasswordConfirmFormProps) {
 
           <Field>
             <Label>Password</Label>
-            <Input
-              required
-              ref={passwordRef}
-              minLength={8}
-              pattern={passwordRegStr}
-              type="password"
-              name="password"
-              autoComplete="new-password"
-              onChange={(e) => {
-                e.currentTarget.setCustomValidity('')
-              }}
-            />
+            <Popover className="relative">
+              <PopoverButton as={Fragment}>
+                <Input
+                  type="password"
+                  name="password"
+                  autoComplete="new-password"
+                  invalid={passwordInvalid}
+                  onChange={(e) => {
+                    setPassword(e.target.value)
+                    passwordInvalid && setPasswordInvalid(false)
+                  }}
+                />
+              </PopoverButton>
+
+              <PopoverPanel
+                anchor="bottom"
+                className="mt-2 px-4 pb-6 text-sm/4 transition duration-200 ease-in-out data-[closed]:-translate-y-1 data-[closed]:opacity-0 dark:bg-white/5"
+              >
+                <PasswordStrengthHit password={password} />
+              </PopoverPanel>
+            </Popover>
           </Field>
 
           <Field>
             <Label>Confirm</Label>
             <Input
-              required
-              ref={passwordSecRef}
               type="password"
               name="password-sec"
               autoComplete="new-password"
+              invalid={passwordSecInvalid}
               onChange={(e) => {
-                e.currentTarget.setCustomValidity('')
+                passwordSecInvalid && setPasswordSecInvalid(false)
               }}
             />
+            {passwordSecInvalid && <Text className="absolute !text-red-600">The passwords do not match</Text>}
           </Field>
 
           <SubmitButton title={props.submitTitle} />

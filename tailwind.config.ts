@@ -12,7 +12,8 @@ const config: Config = {
         sans: ['Inter, sans-serif', { fontFeatureSettings: '"cv11"' }],
       },
     },
+    plugins: [],
   },
-  plugins: [],
 }
+
 export default config

@@ -8,5 +8,5 @@ export function formatBytes(bytes?: number): string {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
-export const passwordRegStr = '^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$' // 注意双重转义
+export const passwordRegStr = '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-/_,.]).{8,}$'
 export const passwordReg = RegExp(passwordRegStr)

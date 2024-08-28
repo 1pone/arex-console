@@ -37,9 +37,7 @@ export default function Bind() {
           <Field>
             <Label>
               Tenant Code
-              <HelpTooltip>
-                Tenant code will be used for the domain name and will not be able to be modified after confirmation
-              </HelpTooltip>
+              <HelpTooltip title="Tenant code will be used for the domain name and will not be able to be modified after confirmation" />
             </Label>
             <div className="mt-3 flex">
               <Input minLength={2} pattern="^[a-zA-Z0-9\-]{2,61}$" name="tenantCode" />
