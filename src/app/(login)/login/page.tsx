@@ -37,7 +37,7 @@ export default function Login() {
   }
 
   return (
-    <form action={handleLogin} className="w-full max-w-sm space-y-8">
+    <form action={handleLogin} className="w-full max-w-sm">
       <Field>
         <FieldGroup>
           <Legend className="">Sign in</Legend>
@@ -60,22 +60,26 @@ export default function Login() {
               pending: 'Signing in...',
             }}
           />
-
-          <Divider />
-
-          <Button className="group w-full" onClick={handleGoogleOauth}>
-            <GoogleIcon className="brightness-150 grayscale group-hover:brightness-100 group-hover:grayscale-0" />
-            Login with Google
-          </Button>
-
-          <div className="float-right mt-2 flex gap-1">
-            <Text>Don&#39;t have an account?</Text>
-            <Link href="/signup" className="font-semibold">
-              Sign up
-            </Link>
-          </div>
         </FieldGroup>
       </Field>
+
+      <div className="flex items-center gap-x-2 py-2">
+        <Divider />
+        <Text>or</Text>
+        <Divider />
+      </div>
+
+      <Button className="group w-full" onClick={handleGoogleOauth}>
+        <GoogleIcon className="brightness-150 grayscale group-hover:brightness-100 group-hover:grayscale-0" />
+        Login with Google
+      </Button>
+
+      <div className="float-right mt-2 flex gap-1">
+        <Text>Don&#39;t have an account?</Text>
+        <Link href="/signup" className="font-semibold">
+          Sign up
+        </Link>
+      </div>
     </form>
   )
 }
