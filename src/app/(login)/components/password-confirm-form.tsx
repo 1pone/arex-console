@@ -82,7 +82,7 @@ export default function PasswordConfirmForm(props: PasswordConfirmFormProps) {
 
               <PopoverPanel
                 anchor="bottom"
-                className="mt-2 px-4 pb-6 text-sm/4 transition duration-200 ease-in-out data-[closed]:-translate-y-1 data-[closed]:opacity-0 dark:bg-white/5"
+                className="mt-2 px-4 pb-6 pt-1 text-sm/4 transition duration-200 ease-in-out data-[closed]:-translate-y-1 data-[closed]:opacity-0"
               >
                 <PasswordStrengthHit password={password} />
               </PopoverPanel>
