@@ -65,7 +65,7 @@ export default function Login() {
 
       <div className="flex items-center gap-x-2 py-2">
         <Divider />
-        <Text>or</Text>
+        <Text>OR</Text>
         <Divider />
       </div>
 

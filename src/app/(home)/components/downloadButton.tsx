@@ -73,7 +73,7 @@ export function DownloadButton(props: DownloadButtonProps) {
   return (
     <form action={handleDownloadClient}>
       <div className="dropdown-button flex items-center justify-center py-4">
-        <Button type="submit" className="h-12 !rounded-r-none border-r-2 border-white pl-6 text-base">
+        <Button type="submit" className="mr-0.5 h-12 !rounded-r-none pl-6 text-base">
           Download
         </Button>
 
