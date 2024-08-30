@@ -30,7 +30,6 @@ type OauthLoginRes =
     }
 
 export async function GET(request: NextRequest, response: NextResponse) {
-  console.log(request.headers)
   const searchParams = request.nextUrl.searchParams
 
   const code = searchParams.get('code')
@@ -56,7 +55,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
       } else {
         cookies().set(ACCESS_TOKEN_KEY, res.accessToken, authCookiesOptions)
         const infoRes = await getTenantInfo()
-        if (!infoRes.success) redirect('/verify/error')
+        if (!infoRes?.success) redirect('/verify/error')
       }
     } else {
       redirect('/verify/error')

@@ -8,7 +8,6 @@ import { Input } from '@/components/input'
 import { Link } from '@/components/link'
 import SubmitButton from '@/components/submit-button'
 import { Text } from '@/components/text'
-import { redirect } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import { toast } from 'react-toastify'
 import { login } from '../actions'
@@ -27,9 +26,8 @@ export default function Login() {
   }, [])
 
   async function handleLogin(formData: FormData) {
-    const { success, message } = await login(formData)
-    toast[success ? 'success' : 'error'](message)
-    if (success) redirect('/')
+    const res = await login(formData)
+    !res?.success && toast.error(res?.message)
   }
 
   function handleGoogleOauth() {
@@ -72,6 +70,11 @@ export default function Login() {
       <Button className="group w-full" onClick={handleGoogleOauth}>
         <GoogleIcon className="brightness-150 grayscale group-hover:brightness-100 group-hover:grayscale-0" />
         Login with Google
+      </Button>
+
+      <Button className="group w-full" href={`/api/auth/login`}>
+        {/*<GoogleIcon className="brightness-150 grayscale group-hover:brightness-100 group-hover:grayscale-0" />*/}
+        Login with Auth0
       </Button>
 
       <div className="float-right mt-2 flex gap-1">

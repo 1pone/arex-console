@@ -67,13 +67,27 @@ export const login = async (formData: FormData) => {
 
   if (data.success && data.accessToken) {
     cookies().set(ACCESS_TOKEN_KEY, data.accessToken, authCookiesOptions)
-    return await getTenantInfo()
+    await getTenantInfo()
+    return
   } else {
     return loginFailedReturn
   }
 }
 
-export async function getTenantInfo() {
+export async function logout(options?: { redirect?: boolean }) {
+  const { redirect: _redirect = true } = options || {}
+
+  cookies().delete(EMAIL_KEY)
+  cookies().delete(ACCESS_TOKEN_KEY)
+  cookies().delete(TENANT_NAME_KEY)
+  cookies().delete(TENANT_CODE_KEY)
+  cookies().delete(TENANT_TOKEN_KEY)
+  cookies().delete(TENANT_EXPIRE_KEY)
+  return _redirect && redirect('/login')
+}
+
+export async function getTenantInfo(options?: { redirect?: boolean }) {
+  const { redirect: _redirect = true } = options || {}
   if (!cookies().get(ACCESS_TOKEN_KEY)) return loginFailedReturn
   try {
     const tenantInfo = await http.post<QueryTenantRes>('/api/login/queryTenant')
@@ -82,7 +96,7 @@ export async function getTenantInfo() {
     cookies().set(TENANT_CODE_KEY, tenantInfo.user.tenantCode, authCookiesOptions)
     cookies().set(TENANT_TOKEN_KEY, tenantInfo.user.tenantToken, authCookiesOptions)
     cookies().set(TENANT_EXPIRE_KEY, tenantInfo.user.expireTime.toString(), authCookiesOptions)
-    return redirect('/')
+    _redirect && redirect('/')
   } catch (e) {
     // https://github.com/vercel/next.js/issues/49298#issuecomment-1537433377
     if (isRedirectError(e)) throw e
