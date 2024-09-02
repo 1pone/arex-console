@@ -48,32 +48,6 @@ const loginFailedReturn = {
   message: 'Login failed, please check your email or password.',
 }
 
-export const login = async (formData: FormData) => {
-  const schema = z.object({
-    email: z.string().email(),
-    password: z.string(),
-  })
-  const parse = schema.safeParse({
-    password: formData.get('password'),
-    email: formData.get('email'),
-  })
-
-  if (!parse.success) return loginFailedReturn
-
-  const data = await http.post<LoginRes>('/api/login/login', {
-    password: parse.data.password,
-    email: parse.data.email,
-  })
-
-  if (data.success && data.accessToken) {
-    cookies().set(ACCESS_TOKEN_KEY, data.accessToken, authCookiesOptions)
-    await getTenantInfo()
-    return
-  } else {
-    return loginFailedReturn
-  }
-}
-
 export async function logout(options?: { redirect?: boolean }) {
   const { redirect: _redirect = true } = options || {}
 
@@ -101,47 +75,6 @@ export async function getTenantInfo(options?: { redirect?: boolean }) {
     // https://github.com/vercel/next.js/issues/49298#issuecomment-1537433377
     if (isRedirectError(e)) throw e
     return loginFailedReturn
-  }
-}
-
-type VerifyRes =
-  | { success: true; errorCode: number; accessToken: string }
-  | { success: false; errorCode: number; accessToken: null }
-
-export async function verify(upn?: string | null) {
-  if (upn) {
-    const res = await http.post<VerifyRes>('/api/login/verify', {
-      upn,
-    })
-    if (res.success) {
-      return Promise.resolve(res)
-    } else {
-      redirect(`/verify/error?code=${res.errorCode}`)
-    }
-  } else {
-    redirect('/verify/error')
-  }
-}
-
-type RegisterRes = { success: boolean; errorCode: number }
-
-export async function register(params: { email?: string; password?: string }) {
-  const schema = z.object({
-    email: z.string().email(),
-    password: z.string().regex(passwordReg),
-  })
-
-  const parse = schema.safeParse(params)
-
-  if (!parse.success) {
-    return redirect('/signup/error')
-  } else {
-    const res = await http.post<RegisterRes>('/api/login/register', {
-      ...parse.data,
-    })
-
-    if (res.success) return redirect('/signup/almost/success')
-    else return redirect('/signup/error')
   }
 }
 

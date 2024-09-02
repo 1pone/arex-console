@@ -1,4 +1,4 @@
-import TenantToken from '@/app/(home)/settings/tenantToken'
+import TenantToken from '@/app/(home)/settings/tenant-token'
 import { Divider } from '@/components/divider'
 import { Heading, Subheading } from '@/components/heading'
 import { Input } from '@/components/input'

@@ -1,20 +1,13 @@
-'use client'
-
 import { Heading } from '@/components/heading'
 import { EMAIL_KEY } from '@/lib/auth'
-import { getCookie } from 'cookies-next'
-import { useEffect, useState } from 'react'
+import { cookies } from 'next/headers'
 
 export default function Greeting() {
-  const [nickname, setNickname] = useState<string>()
-  useEffect(() => {
-    const email = getCookie(EMAIL_KEY)
-    setNickname(email?.split('@')?.[0])
-  }, [])
-
+  const hours = new Date().getHours()
+  const timePeriod = hours > 16 ? 'night' : hours > 12 ? 'afternoon' : 'morning'
   return (
     <Heading>
-      Good {new Date().getHours() > 12 ? 'afternoon' : 'morning'}, {nickname}
+      Good {timePeriod}, {cookies().get(EMAIL_KEY)?.value.split('@')?.[0]}.
     </Heading>
   )
 }

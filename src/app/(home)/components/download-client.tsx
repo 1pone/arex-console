@@ -1,8 +1,9 @@
 import { getClientDownloadData } from '@/app/(home)/downloadActions'
 import { Text, TextLink } from '@/components/text'
+import { URL_GITHUB_RELEASE } from '@/constant'
 import arexLogo from '@/images/logo.png'
 import Image from 'next/image'
-import { DownloadButton } from './downloadButton'
+import { DownloadButton } from './download-button'
 
 export default async function DownloadClient() {
   const clientDownloadData = await getClientDownloadData()
@@ -23,7 +24,7 @@ export default async function DownloadClient() {
       <div className="flex flex-col items-center">
         <div className="flex flex-1 flex-col justify-center">
           <DownloadButton assets={clientDownloadData?.assets} />
-          <TextLink href="https://github.com/arextest/releases/releases" target="_blank" className="ml-auto">
+          <TextLink href={URL_GITHUB_RELEASE} target="_blank" className="ml-auto">
             History versions
           </TextLink>
         </div>

@@ -1,8 +1,8 @@
 import { Heading } from '@/components/heading'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/table'
 import { queryMember } from '../actions'
-import AddMember from './addMember'
-import RemoveMember from './removeMember'
+import AddMember from './add-member'
+import RemoveMember from './remove-member'
 
 export default async function Member() {
   const members = await queryMember()

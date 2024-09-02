@@ -1,7 +1,7 @@
-import DownloadClient from '@/app/(home)/components/downloadClient'
+import DownloadClient from '@/app/(home)/components/download-client'
 import Greeting from '@/app/(home)/components/greeting'
-import SubscribeInfo from '@/app/(home)/components/subscribeInfo'
-import TenantExpire from '@/app/(home)/components/tenantExpire'
+import SubscribeInfo from '@/app/(home)/components/subscribe-info'
+import TenantExpire from '@/app/(home)/components/tenant-expire'
 import { Divider } from '@/components/divider'
 import { Subheading } from '@/components/heading'
 

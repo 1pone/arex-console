@@ -31,3 +31,5 @@ export const ErrorCode: Record<string, string> = {
   // used for frontend
   [ErrorCodeEnum.ParameterParsingError]: 'Parameter parsing error',
 }
+
+export const URL_GITHUB_RELEASE = 'https://github.com/arextest/releases/releases'
