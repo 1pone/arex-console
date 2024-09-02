@@ -11,7 +11,6 @@ import {
   TENANT_TOKEN_KEY,
 } from '@/lib/auth'
 import http from '@/lib/http'
-import { passwordReg } from '@/lib/utils'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
@@ -78,6 +77,25 @@ export async function getTenantInfo(options?: { redirect?: boolean }) {
   }
 }
 
+type VerifyRes =
+  | { success: true; errorCode: number; accessToken: string }
+  | { success: false; errorCode: number; accessToken: null }
+
+export async function verify(upn?: string | null) {
+  if (upn) {
+    const res = await http.post<VerifyRes>('/api/login/verify', {
+      upn,
+    })
+    if (res.success) {
+      return Promise.resolve(res)
+    } else {
+      redirect(`/verify/error?code=${res.errorCode}`)
+    }
+  } else {
+    redirect('/verify/error')
+  }
+}
+
 export async function bindTenant(formData: FormData) {
   const schema = z.object({
     accessToken: z.string(),
@@ -115,64 +133,5 @@ export async function bindTenant(formData: FormData) {
     cookies().set(ACCESS_TOKEN_KEY, res.accessToken, authCookiesOptions)
     await getTenantInfo()
     redirect(`/signup/success`)
-  }
-}
-
-export async function sendResetPasswordEmail(email: string) {
-  const schema = z.string().email()
-
-  const parse = schema.safeParse(email)
-
-  if (!parse.success)
-    return {
-      success: false,
-      errorCode: ErrorCodeEnum.ParameterParsingError,
-    }
-
-  try {
-    const success = await http.post<boolean>('/api/login/sendResetPwdEmail', {
-      email: parse.data,
-    })
-    if (success) redirect('/account/reset/send-verify-email')
-  } catch (e) {
-    if (isRedirectError(e)) throw e
-    return { success: false, errorCode: (e as Error).message }
-  }
-}
-
-export async function resetPassword(params: { password: string; accessToken?: string }) {
-  const schema = z.object({
-    password: z.string().regex(passwordReg),
-    accessToken: z.string().min(1),
-  })
-
-  const parse = schema.safeParse(params)
-
-  if (!parse.success) {
-    return {
-      success: false,
-      errorCode: ErrorCodeEnum.ParameterParsingError,
-    }
-  } else {
-    try {
-      const success = await http.post<boolean>(
-        '/api/login/resetPassword',
-        {
-          password: parse.data.password,
-        },
-        {
-          headers: {
-            'access-token': parse.data.accessToken,
-          },
-        }
-      )
-
-      if (success) {
-        redirect('/account/reset/success')
-      }
-    } catch (e) {
-      if (isRedirectError(e)) throw e
-      else return { success: false, errorCode: (e as Error).message }
-    }
   }
 }
