@@ -14,7 +14,7 @@ export default async function DownloadClient() {
         <Image src={arexLogo} alt="arex-logo" width={128} height={128} className="drop-shadow-xl" />
         <div className="p-4">
           <Text>Version: {clientDownloadData?.tag_name}</Text>
-          <Text>Release date: {new Date(clientDownloadData?.published_at).toLocaleDateString()} </Text>
+          <Text>Release date: {new Date(clientDownloadData?.published_at || '').toLocaleDateString()} </Text>
           <TextLink href={clientDownloadData?.html_url || '#'} target="_blank">
             Release notes ➚
           </TextLink>
