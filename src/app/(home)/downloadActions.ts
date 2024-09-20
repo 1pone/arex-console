@@ -1,4 +1,5 @@
 'use server'
+import { GlobalRef } from '@/lib/globalRef'
 
 export type UrlAsset = {
   url: string
@@ -56,7 +57,7 @@ export type ClientDownloadUrlData = {
   body: string
 }
 
-export async function fetchClientDownloadData() {
+async function fetchClientDownloadData() {
   try {
     const latest = await fetch(
       `https://api.github.com/repos/arextest/releases/releases/latest?access_token=${process.env.GH_TOKEN}`,
@@ -67,17 +68,21 @@ export async function fetchClientDownloadData() {
       }
     )
     const data: ClientDownloadUrlData = await latest.json()
-    ;(globalThis as any).clientDownloadData = data // https://github.com/vercel/next.js/discussions/15341#discussioncomment-8608211
+    console.log('fetchClientDownloadData', data)
     return data
   } catch (e) {
     console.error(String(e))
   }
 }
 
-export async function setClientDownloadData(data: ClientDownloadUrlData) {
-  ;(globalThis as any).clientDownloadData = data
+const clientDownloadData = new GlobalRef<ClientDownloadUrlData | undefined>('clientDownloadData')
+
+export async function syncClientDownloadData() {
+  clientDownloadData.value = await fetchClientDownloadData()
+  return clientDownloadData.value
 }
 
-export async function getClientDownloadData(): Promise<ClientDownloadUrlData> {
-  return (globalThis as any).clientDownloadData
+export async function getClientDownloadData(): Promise<ClientDownloadUrlData | undefined> {
+  if (!clientDownloadData.value) return await syncClientDownloadData()
+  return clientDownloadData.value
 }

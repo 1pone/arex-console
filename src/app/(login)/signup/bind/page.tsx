@@ -1,6 +1,7 @@
 'use client'
 
 import { bindTenant } from '@/app/(login)/actions'
+import { Button } from '@/components/button'
 import { Field, FieldGroup, Label, Legend } from '@/components/fieldset'
 import HelpTooltip from '@/components/help-tooltip'
 import { Input } from '@/components/input'
@@ -23,17 +24,14 @@ export default function Bind() {
       <Field>
         <FieldGroup>
           <Legend>Bind Tenant</Legend>
-
           <Field hidden>
             <Label>Access Token</Label>
             <Input required name="accessToken" defaultValue={searchParams.get('token') as string} />
           </Field>
-
           <Field>
             <Label>Tenant Name</Label>
             <Input required minLength={2} maxLength={63} name="tenantName" />
           </Field>
-
           <Field>
             <Label>
               Tenant Code
@@ -51,6 +49,8 @@ export default function Bind() {
               pending: 'Binding...',
             }}
           />
+
+          <Button href="/api/auth/logout">Logout</Button>
         </FieldGroup>
       </Field>
     </form>
