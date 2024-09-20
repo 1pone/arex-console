@@ -22,7 +22,7 @@ export const GET = handleAuth({
 
             try {
               const encrypted = publicEncrypt(
-                { key: process.env.CRYPTO_PRIVATE_KEY as string, padding: constants.RSA_PKCS1_PADDING },
+                { key: process.env.CRYPTO_PUBLIC_KEY as string, padding: constants.RSA_PKCS1_PADDING },
                 Buffer.from(JSON.stringify(userInfo), 'utf8')
               )
 
@@ -40,7 +40,7 @@ export const GET = handleAuth({
               await getTenantInfo({ redirect: false })
 
               // const decrypted = privateDecrypt(
-              //   { key: process.env.CRYPTO_PUBLIC_KEY as string, padding: constants.RSA_PKCS1_PADDING },
+              //   { key: process.env.CRYPTO_PRIVATE_KEY as string, padding: constants.RSA_PKCS1_PADDING },
               //   encrypted
               // )
               // console.log('decrypted: ', Buffer.from(decrypted).toString('utf-8'))
