@@ -41,6 +41,7 @@ export async function queryMember() {
     else return []
   } catch (e) {
     console.error(e)
+    return []
   }
 }
 
