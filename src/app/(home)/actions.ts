@@ -19,9 +19,10 @@ export async function querySubscribeUsage() {
     const data = await http.post<SubscribeUsage>('/api/subscribe/queryUsage', {
       tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
     })
+    console.log('querySubscribeUsage', data)
     if (data.success) return data
   } catch (e) {
-    logger.error(e)
+    logger.error('failed querySubscribeUsage', e)
   }
 }
 
@@ -32,11 +33,15 @@ type Member = {
 }
 
 export async function queryMember() {
-  const data = await http.post<Member>('/api/user/mgnt/queryUserEmails', {
-    tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
-  })
-  if (data.success) return data.userEmails
-  else return []
+  try {
+    const data = await http.post<Member>('/api/user/mgnt/queryUserEmails', {
+      tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
+    })
+    if (data.success) return data.userEmails
+    else return []
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 type AddMemberRes = {
