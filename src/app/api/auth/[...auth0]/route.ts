@@ -22,7 +22,10 @@ export const GET = handleAuth({
 
             try {
               const encrypted = publicEncrypt(
-                { key: process.env.CRYPTO_PUBLIC_KEY as string, padding: constants.RSA_PKCS1_PADDING },
+                {
+                  key: Buffer.from(process.env.AUTH_PUBLIC_KEY as string, 'base64').toString() as string,
+                  padding: constants.RSA_PKCS1_PADDING,
+                },
                 Buffer.from(JSON.stringify(userInfo), 'utf8')
               )
 
