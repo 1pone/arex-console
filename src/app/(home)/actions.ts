@@ -2,6 +2,7 @@
 
 import { TENANT_CODE_KEY } from '@/lib/auth'
 import http from '@/lib/http'
+import { logger } from '@/lib/logger'
 import { cookies } from 'next/headers'
 
 type SubscribeUsage = {
@@ -14,10 +15,14 @@ type SubscribeUsage = {
 }
 
 export async function querySubscribeUsage() {
-  const data = await http.post<SubscribeUsage>('/api/subscribe/queryUsage', {
-    tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
-  })
-  if (data.success) return data
+  try {
+    const data = await http.post<SubscribeUsage>('/api/subscribe/queryUsage', {
+      tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
+    })
+    if (data.success) return data
+  } catch (e) {
+    logger.error(e)
+  }
 }
 
 type Member = {
