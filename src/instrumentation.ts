@@ -7,7 +7,7 @@ export async function register() {
       if (!publicKey) throw new Error()
       process.env.CRYPTO_PUBLIC_KEY = publicKey
     } catch (e) {
-      console.error('CRYPTO_PUBLIC_KEY or CRYPTO_PRIVATE_KEY is missing')
+      console.error('CRYPTO_PUBLIC_KEY is missing', e)
       process.exit(1)
     }
 
