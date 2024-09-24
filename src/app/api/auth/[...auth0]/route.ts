@@ -12,7 +12,7 @@ import {
 } from '@auth0/nextjs-auth0'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { cookies } from 'next/headers'
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { constants, publicEncrypt } from 'node:crypto'
 
 export const GET = handleAuth({
@@ -79,9 +79,10 @@ export const GET = handleAuth({
     } catch (error) {
       // 捕获特定的错误并重定向
       console.error('Email not verified', error)
-      const redirectUrl = `${req.headers.get('x-forwarded-proto') || 'https'}://${req.headers.get('x-forwarded-host')}/signup/verify-email`
-      console.log('redirect to', redirectUrl)
-      return NextResponse.redirect(redirectUrl)
+      const returnTo = `${req.headers.get('x-forwarded-proto') || 'https'}://${req.headers.get('x-forwarded-host')}/signup/verify-email`
+      return handleLogout(req, ctx, {
+        returnTo,
+      })
     }
   },
   logout: async (req: NextApiRequest, ctx: NextApiResponse) => {
