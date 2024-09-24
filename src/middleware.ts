@@ -7,7 +7,7 @@ export async function middleware(request: NextRequest, response: NextResponse) {
   const accessToken = request.cookies.get(ACCESS_TOKEN_KEY)?.value
   const needBind = request.cookies.get(NEED_BIND_KEY)?.value
   if (!accessToken) {
-    return NextResponse.redirect(new URL('/api/auth/login', request.url))
+    return NextResponse.redirect(new URL('/api/auth/logout', request.url))
   } else if (needBind === NEED_BIND.YES) {
     console.log('need bind', accessToken)
     return NextResponse.redirect(
