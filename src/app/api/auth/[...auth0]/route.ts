@@ -1,5 +1,5 @@
 import { getTenantInfo, logout } from '@/app/(login)/actions'
-import { ACCESS_TOKEN_KEY, authCookiesOptions } from '@/lib/auth'
+import { ACCESS_TOKEN_KEY, authCookiesOptions, NEED_BIND_KEY } from '@/lib/auth'
 import http from '@/lib/http'
 import { logger } from '@/lib/logger'
 import { handleAuth, handleCallback, handleLogout, Session } from '@auth0/nextjs-auth0'
@@ -39,8 +39,14 @@ export const GET = handleAuth({
                 code: encrypted.toString('base64'),
                 oauthType: 4,
               })
+
+              console.log('login/oauthLogin', res)
               cookies().set(ACCESS_TOKEN_KEY, res.accessToken, authCookiesOptions)
-              await getTenantInfo({ redirect: false })
+              if (res.needBind) {
+                cookies().set(NEED_BIND_KEY, String(res.needBind), authCookiesOptions)
+              } else {
+                await getTenantInfo({ redirect: false })
+              }
 
               // const decrypted = privateDecrypt(
               //   { key: process.env.CRYPTO_PRIVATE_KEY as string, padding: constants.RSA_PKCS1_PADDING },

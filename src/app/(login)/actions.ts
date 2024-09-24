@@ -5,6 +5,8 @@ import {
   ACCESS_TOKEN_KEY,
   authCookiesOptions,
   EMAIL_KEY,
+  NEED_BIND,
+  NEED_BIND_KEY,
   TENANT_CODE_KEY,
   TENANT_EXPIRE_KEY,
   TENANT_NAME_KEY,
@@ -56,6 +58,8 @@ export async function logout(options?: { redirect?: boolean }) {
   cookies().delete(TENANT_CODE_KEY)
   cookies().delete(TENANT_TOKEN_KEY)
   cookies().delete(TENANT_EXPIRE_KEY)
+  cookies().delete(NEED_BIND_KEY)
+
   return _redirect && redirect('/login')
 }
 
@@ -74,25 +78,6 @@ export async function getTenantInfo(options?: { redirect?: boolean }) {
     // https://github.com/vercel/next.js/issues/49298#issuecomment-1537433377
     if (isRedirectError(e)) throw e
     return loginFailedReturn
-  }
-}
-
-type VerifyRes =
-  | { success: true; errorCode: number; accessToken: string }
-  | { success: false; errorCode: number; accessToken: null }
-
-export async function verify(upn?: string | null) {
-  if (upn) {
-    const res = await http.post<VerifyRes>('/api/login/verify', {
-      upn,
-    })
-    if (res.success) {
-      return Promise.resolve(res)
-    } else {
-      redirect(`/verify/error?code=${res.errorCode}`)
-    }
-  } else {
-    redirect('/verify/error')
   }
 }
 
@@ -131,7 +116,8 @@ export async function bindTenant(formData: FormData) {
   if (!res.success) return res
   else {
     cookies().set(ACCESS_TOKEN_KEY, res.accessToken, authCookiesOptions)
+    cookies().set(NEED_BIND_KEY, NEED_BIND.NO)
+
     await getTenantInfo()
-    redirect(`/signup/success`)
   }
 }
