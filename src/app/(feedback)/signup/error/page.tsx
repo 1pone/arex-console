@@ -1,14 +1,14 @@
-import { Button } from '@/components/button'
+import LogoutButton from '@/components/logout-button'
+import { Text } from '@/components/text'
 import { ExclamationCircleIcon } from '@heroicons/react/16/solid'
 
 export default function Error() {
   return (
     <>
       <ExclamationCircleIcon />
-      Oops, Sign up failed, please try again...
-      <Button href="/signup" className="mt-8">
-        Back to Signup
-      </Button>
+      <Text>Oops, Sign up failed, please try again...</Text>
+
+      <LogoutButton />
     </>
   )
 }

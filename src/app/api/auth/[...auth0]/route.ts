@@ -2,14 +2,28 @@ import { getTenantInfo, logout } from '@/app/(login)/actions'
 import { ACCESS_TOKEN_KEY, authCookiesOptions, NEED_BIND_KEY } from '@/lib/auth'
 import http from '@/lib/http'
 import { logger } from '@/lib/logger'
-import { handleAuth, handleCallback, handleLogout, Session } from '@auth0/nextjs-auth0'
+import {
+  AppRouteHandlerFnContext,
+  handleAuth,
+  handleCallback,
+  handleLogin,
+  handleLogout,
+  Session,
+} from '@auth0/nextjs-auth0'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { cookies } from 'next/headers'
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { constants, publicEncrypt } from 'node:crypto'
 
 export const GET = handleAuth({
-  callback: async (req: NextApiRequest, ctx: NextApiResponse) => {
+  login: (req: NextRequest, ctx: AppRouteHandlerFnContext) =>
+    handleLogin(req, ctx, {
+      authorizationParams: {
+        prompt: 'select_account',
+        max_age: 0,
+      },
+    }),
+  callback: async (req: NextRequest, ctx: AppRouteHandlerFnContext) => {
     try {
       return await handleCallback(req, ctx, {
         afterCallback: async function (req: NextRequest, session: Session) {
@@ -63,7 +77,13 @@ export const GET = handleAuth({
         },
       })
     } catch (error) {
-      console.error(error)
+      // 捕获特定的错误并重定向
+      console.error('Email not verified', error)
+
+      const url = req.nextUrl.clone()
+      url.pathname = '/signup/verify-email'
+      Array.from(url.searchParams.keys()).forEach((key) => url.searchParams.delete(key))
+      return NextResponse.redirect(url)
     }
   },
   logout: async (req: NextApiRequest, ctx: NextApiResponse) => {
