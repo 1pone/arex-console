@@ -79,9 +79,9 @@ export const GET = handleAuth({
     } catch (error) {
       // 捕获特定的错误并重定向
       console.error('Email not verified', error)
-      return NextResponse.redirect(
-        `${req.headers.get('x-forwarded-proto')}://${req.headers.get('x-forwarded-host')}/signup/verify-email`
-      )
+      const redirectUrl = `${req.headers.get('x-forwarded-proto') || 'https'}://${req.headers.get('x-forwarded-host')}/signup/verify-email`
+      console.log('redirect to', redirectUrl)
+      return NextResponse.redirect(redirectUrl)
     }
   },
   logout: async (req: NextApiRequest, ctx: NextApiResponse) => {
