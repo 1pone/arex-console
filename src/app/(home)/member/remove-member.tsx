@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { removeMember } from '../actions'
 
-export default async function RemoveMember({ email }: { email: string }) {
+export default function RemoveMember({ email }: { email: string }) {
   const { refresh } = useRouter()
 
   const handleRemoveMember = async () => {

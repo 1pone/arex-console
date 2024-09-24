@@ -14,5 +14,5 @@ export default function useDelayRedirect(url: string, delay: number) {
       delay
     )
     return () => clearTimeout(timeout)
-  }, [])
+  }, [delay, url])
 }
