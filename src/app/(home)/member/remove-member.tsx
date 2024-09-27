@@ -9,14 +9,15 @@ export default function RemoveMember({ email }: { email: string }) {
   const { refresh } = useRouter()
 
   const handleRemoveMember = async () => {
-    const success = await removeMember(email)
-    if (success) {
+    try {
+      await removeMember(email)
       refresh()
       toast.success('Remove successfully')
-    } else {
+    } catch (e) {
       toast.error('Remove failed, please try again')
     }
   }
+
   return (
     <Button plain onClick={handleRemoveMember}>
       Remove

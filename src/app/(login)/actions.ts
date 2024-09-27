@@ -1,6 +1,6 @@
 'use server'
 
-import { ErrorCodeEnum } from '@/constant'
+import { ErrorCodeEnum, ErrorMessageMap } from '@/constant'
 import {
   ACCESS_TOKEN_KEY,
   authCookiesOptions,
@@ -12,23 +12,16 @@ import {
   TENANT_NAME_KEY,
   TENANT_TOKEN_KEY,
 } from '@/lib/auth'
+import ErrorWithCode from '@/lib/ErrorWithCode'
 import http from '@/lib/http'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
-type LoginRes =
-  | {
-      success: true
-      errorCode: null
-      accessToken: string
-    }
-  | {
-      success: false
-      errorCode: number
-      accessToken: null
-    }
+type LoginRes = {
+  accessToken: string
+}
 
 export type QueryTenantRes = {
   success: boolean
@@ -95,10 +88,7 @@ export async function bindTenant(formData: FormData) {
   })
 
   if (!parse.success)
-    return {
-      success: false,
-      errorCode: ErrorCodeEnum.ParameterParsingError,
-    }
+    throw new ErrorWithCode(ErrorMessageMap[ErrorCodeEnum.ParameterError], ErrorCodeEnum.ParameterError)
 
   const res = await http.post<LoginRes>(
     '/api/login/bind',
@@ -113,11 +103,8 @@ export async function bindTenant(formData: FormData) {
     }
   )
 
-  if (!res.success) return res
-  else {
-    cookies().set(ACCESS_TOKEN_KEY, res.accessToken, authCookiesOptions)
-    cookies().set(NEED_BIND_KEY, NEED_BIND.NO)
+  cookies().set(ACCESS_TOKEN_KEY, res.accessToken, authCookiesOptions)
+  cookies().set(NEED_BIND_KEY, NEED_BIND.NO)
 
-    await getTenantInfo()
-  }
+  await getTenantInfo()
 }

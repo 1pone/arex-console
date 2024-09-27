@@ -7,7 +7,6 @@ import HelpTooltip from '@/components/help-tooltip'
 import { Input } from '@/components/input'
 import SubmitButton from '@/components/submit-button'
 import { Text } from '@/components/text'
-import { ErrorCode } from '@/constant'
 import { useSearchParams } from 'next/navigation'
 import { toast } from 'react-toastify'
 
@@ -15,8 +14,11 @@ export default function Bind() {
   const searchParams = useSearchParams()
 
   async function handleBind(formData: FormData) {
-    const res = await bindTenant(formData)
-    if (!res?.success && res?.errorCode) toast.error(ErrorCode[res.errorCode.toString()])
+    try {
+      await bindTenant(formData)
+    } catch (e) {
+      if (e instanceof Error) toast.error(e.message)
+    }
   }
 
   return (
@@ -42,7 +44,7 @@ export default function Bind() {
                 <HelpTooltip title="Tenant code will be used for the domain name and will not be able to be modified after confirmation" />
               </Label>
               <div className="mt-3 flex">
-                <Input minLength={2} pattern="^[a-zA-Z0-9\-]{2,61}$" name="tenantCode" />
+                <Input required name="tenantCode" />
                 <Text className="ps-2 !text-sm/8">.arextest.com</Text>
               </div>
             </Field>

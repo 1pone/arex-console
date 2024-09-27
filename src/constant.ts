@@ -11,10 +11,11 @@ export const ResponseCodeMap = {
 }
 
 export enum ErrorCodeEnum {
-  ParameterParsingError = '2000',
+  UnknownError = '-1',
+  ParameterError = '2000',
 }
 
-export const ErrorCode: Record<string, string> = {
+export const ErrorMessageMap: Record<string, string> = {
   '1000': 'Login failed',
   '1001': 'User existed',
   '1002': 'User not existed',
@@ -29,7 +30,8 @@ export const ErrorCode: Record<string, string> = {
   '1013': 'Email format error',
   '1019': 'Email already exit',
   // used for frontend
-  [ErrorCodeEnum.ParameterParsingError]: 'Parameter parsing error',
+  [ErrorCodeEnum.UnknownError]: 'Unknown Error, please try again',
+  [ErrorCodeEnum.ParameterError]: 'Request parameter error',
 }
 
 export const URL_GITHUB_RELEASE = 'https://github.com/arextest/releases/releases'

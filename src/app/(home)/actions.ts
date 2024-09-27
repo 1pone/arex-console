@@ -2,10 +2,9 @@
 
 import { TENANT_CODE_KEY } from '@/lib/auth'
 import http from '@/lib/http'
-import { logger } from '@/lib/logger'
 import { cookies } from 'next/headers'
 
-type SubscribeUsage = {
+export type SubscribeUsage = {
   errorCode: number
   memberLimit: number
   memberUsage: number
@@ -15,15 +14,9 @@ type SubscribeUsage = {
 }
 
 export async function querySubscribeUsage() {
-  try {
-    const data = await http.post<SubscribeUsage>('/api/subscribe/queryUsage', {
-      tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
-    })
-    console.log('querySubscribeUsage', data)
-    if (data.success) return data
-  } catch (e) {
-    logger.error('failed querySubscribeUsage', e)
-  }
+  return http.post<SubscribeUsage>('/api/subscribe/queryUsage', {
+    tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
+  })
 }
 
 type Member = {
@@ -33,16 +26,10 @@ type Member = {
 }
 
 export async function queryMember() {
-  try {
-    const data = await http.post<Member>('/api/user/mgnt/queryUserEmails', {
-      tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
-    })
-    if (data.success) return data.userEmails
-    else return []
-  } catch (e) {
-    console.error(e)
-    return []
-  }
+  const data = await http.post<Member>('/api/user/mgnt/queryUserEmails', {
+    tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
+  })
+  if (data.success) return data.userEmails
 }
 
 type AddMemberRes = {
@@ -51,17 +38,10 @@ type AddMemberRes = {
 }
 
 export async function addMember(email: string) {
-  try {
-    return await http.post<AddMemberRes>('/api/user/mgnt/addUser', {
-      tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
-      emails: [email],
-    })
-  } catch (errorCode: unknown) {
-    return {
-      success: false,
-      errorCode,
-    }
-  }
+  return http.post<AddMemberRes>('/api/user/mgnt/addUser', {
+    tenantCode: cookies().get(TENANT_CODE_KEY)?.value,
+    emails: [email],
+  })
 }
 
 export async function removeMember(email: string) {

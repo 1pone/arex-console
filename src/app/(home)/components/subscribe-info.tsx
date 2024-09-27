@@ -1,9 +1,15 @@
 import Stat from '@/components/stat'
 import { formatBytes } from '@/lib/utils'
-import { querySubscribeUsage } from '../actions'
+import { toast } from 'react-toastify'
+import { querySubscribeUsage, SubscribeUsage } from '../actions'
 
 export default async function SubscribeInfo() {
-  const subscribeData = await querySubscribeUsage()
+  let subscribeData: SubscribeUsage | undefined
+  try {
+    subscribeData = await querySubscribeUsage()
+  } catch (e) {
+    if (e instanceof Error) toast.error(e.message)
+  }
 
   return (
     <>

@@ -1,4 +1,5 @@
-import { ResponseCodeMap } from '@/constant'
+import { ErrorCodeEnum, ErrorMessageMap, ResponseCodeMap } from '@/constant'
+import ErrorWithCode from '@/lib/ErrorWithCode'
 import { cookies } from 'next/headers'
 
 type ResponseType<T> = {
@@ -7,7 +8,7 @@ type ResponseType<T> = {
     responseDesc: string
     timestamp: number
   }
-  body: T
+  body: T & { success?: boolean; errorCode?: number }
 }
 
 async function http<T>(url: string, options?: RequestInit): Promise<T> {
@@ -19,15 +20,28 @@ async function http<T>(url: string, options?: RequestInit): Promise<T> {
         ...options?.headers,
       },
     })
-    const responseJson = (await response.json()) as ResponseType<Promise<T>>
-    if (responseJson.responseStatusType.responseCode === ResponseCodeMap.SUCCESS) {
-      return responseJson.body
-    } else {
-      throw new Error(responseJson.responseStatusType.responseCode.toString())
+
+    if (!response.ok) {
+      throw new ErrorWithCode(`HTTP error! status: ${response.status}`, response.status)
     }
-  } catch (error: any) {
+
+    const responseJson = (await response.json()) as ResponseType<T>
+    if (
+      responseJson.responseStatusType.responseCode !== ResponseCodeMap.SUCCESS ||
+      responseJson.body?.success === false
+    ) {
+      throw new ErrorWithCode(
+        responseJson.responseStatusType.responseDesc,
+        responseJson.responseStatusType.responseCode
+      )
+    } else {
+      return responseJson.body as T
+    }
+  } catch (error) {
     console.error('Fetch failed:', error)
-    throw error?.message
+    if (error instanceof ErrorWithCode) throw new ErrorWithCode(error.message, error.code)
+    else if (error instanceof Error) throw new ErrorWithCode(error.message)
+    else throw new ErrorWithCode(ErrorCodeEnum.UnknownError, ErrorMessageMap[ErrorCodeEnum.UnknownError])
   }
 }
 
